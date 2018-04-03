@@ -19,7 +19,8 @@ foreach ($form as $element) {
       } 
       $label = "<label class='col-lg-2 control-label'>{$label}</label>";
    }
-   
+   //var_dump($label);
+   //echo $label;
    $type = isset($attribute['type'])?$attributes['type']:'';
    $formElement = '';
    switch ($type) {
@@ -40,7 +41,10 @@ foreach ($form as $element) {
        $label = '';
        break;        
     }
-    echo "{$label} <div class='col-lg-10'>{$formElement}</div>";
+//    echo "{$label}<div class='col-lg-10'>{$formElement}</div>";
+   // echo $label;
+    //print_r($formElement);
+    echo "<div class='col-lg-10'>{$formElement}</div>";
     echo '</div>';
 }
 echo '</fieldset>';

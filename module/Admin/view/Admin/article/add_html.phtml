@@ -1,0 +1,64 @@
+<div class="bs-docs-section">
+    <div class="well">
+
+<form action="/admin/article/add/" method="post" name="articleAddForm" class="bs-example form-horizontal" id="articleAddForm">
+<!--    <fieldset>-->
+        <legend>Добавление статьи</legend>
+        <div class="form-group"> 
+            <div class='col-lg-10'>
+                <label class="col-lg-2 control-label">
+                   <span>Категория</span>
+                </label>
+                   <select name="category" class="form-control" required="required">
+                   <option value="">Выберите категорию...</option>
+                   <option value="1">categoryName</option>
+                   <option value="2">namekey1</option>
+                   <option value="3">namekey2_edit</option>
+                   </select>
+<!--            </div>-->
+        </div>
+        <div class="form-group"> 
+            <div class='col-lg-10'>
+                <label class="col-lg-2 control-label">
+                    <span>Заголовок</span>
+                    <input type="text" name="title" class="form-control" required="required" value="">
+                </label>
+            </div>
+        </div>
+        <div class="form-group"> 
+            <div class='col-lg-10'>
+                <label class="col-lg-2 control-label">
+                    <span>Начало статьи</span>
+                    <textarea name="shortArticle" class="form-control ckeditor"></textarea>
+                </label>
+            </div></div>
+        <div class="form-group"> 
+            <div class='col-lg-10'>
+                <label class="col-lg-2 control-label">
+                    <span>Статья</span>
+                    <textarea name="article" class="form-control ckeditor" required="required"></textarea>
+                </label>
+            </div>
+        </div>
+        <div class="form-group"> 
+                    <div class='col-lg-10'>
+                        <label class="col-lg-2 control-label">
+                            <span>Опубликовать</span>
+                            <input type="hidden" name="isPublic" value="0">
+                            <input type="checkbox" name="isPublic" value="1">
+                        </label>
+                    </div>
+        </div>
+        <div class="form-group"> 
+                    <div class='col-lg-10'>
+                        <input type="submit" name="submit" id="btn_submit" class="btn btn-primary" value="Сохранить">
+                    </div>
+        </div>
+<!--    </fieldset>-->
+</form>           
+        
+        
+    </div>    
+</div>
+<script src="/js/ckeditor/ckeditor.js"></script>
+    

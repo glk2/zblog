@@ -126,6 +126,31 @@ public function editAction() {
         return $this->redirect()->toRoute('admin/article');        
     
         
+    }
+    
+    public function deleteAction() {
+        $id = (int) $this->params()->fromRoute('id',0);         
+        $em = $this->getEntityManager();
+        
+        $status = 'success';
+        $message = 'Запись удалена';
+        try {
+          $repository = $em->getRepository('Blog\Entity\Article');
+          
+          $item = $repository->find($id);
+          $em->remove($item);
+          $em->flush();
+        } catch (\Exception $ex) {
+            $status = 'error';
+            $message = 'Ошибка удаления записи: '.$ex->getMessage();
+        }
+
+        $this->flashMessenger()
+                    ->setNamespace($status)
+                    ->addMessage($message);
+
+        return $this->redirect()->toRoute('admin/article'); 
+
     }    
     
     
