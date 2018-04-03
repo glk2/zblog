@@ -21,7 +21,7 @@ class ArticleController extends BaseController
               ->orderBy('a.id','DESC');
         $adapter = new DoctrineAdapter(new ORMPaginator($query));
         $paginator = new Paginator($adapter); //шаблон проектирования адаптер
-        $paginator->setDefaultItemCountPerPage(1);
+        $paginator->setDefaultItemCountPerPage(2);
         $paginator->setCurrentPageNumber((int) $this->params()->fromQuery('page',1));
         //var_dump($paginator);
         return array('articles'=>$paginator);
@@ -70,5 +70,63 @@ class ArticleController extends BaseController
         return $this->redirect()->toRoute('admin/article');        
         
     }
+
+public function editAction() {
+        
+        $message = $status = '';
+        $em = $this->getEntityManager();
+        $form = new ArticleAddForm($em);
+        
+                
+        $id = (int) $this->params()->fromRoute('id',0);
+        $article = $em->find('Blog\Entity\Article',$id);
+        
+        if (empty($article)){
+            $status = 'error';
+            $message = 'Статья не найдена';
+            $this->flashMessenger()
+                    ->setNamespace($status)
+                    ->addMessage($message);
+            return $this->redirect()->toRoute('admin/article');    
+        }                
+        
+        $form->setHydrator(new DoctrineHydrator($em,'\Article')); //гидратор категорию подтянет
+        $form->bind($article);
+        
+       
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+           $data = $request->getPost(); 
+           $form->setData($data); 
+           if ($form->isValid()) {
+               $em->persist($article);
+               $em->flush();
+               
+               $status = 'success';
+               $message = 'Статья обновлена';
+           } else {
+               $status = 'error';
+               $message = 'Ошибка параметров';
+               foreach ($form->getInputFilter()->getInvalidFilter() as $errors){
+                   foreach ($errors->getMessages() as $error) {
+                       $message .= ' '.$error;
+                   }
+                   
+               }
+           }
+        } else {
+            return array('form' => $form, 'id' => $id); 
+        }
+        
+        if ($message){
+            $this->flashMessenger()
+                    ->setNamespace($status)
+                    ->addMessage($message);
+        }
+        return $this->redirect()->toRoute('admin/article');        
+    
+        
+    }    
+    
     
 }    

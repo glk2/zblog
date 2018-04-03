@@ -82,7 +82,7 @@ class CategoryController extends BaseController
                $em->flush();
                
                $status = 'success';
-               $message = 'Категория добавлена';
+               $message = 'Категория обновлена';
            } else {
                $status = 'error';
                $message = 'Ошибка параметров';
