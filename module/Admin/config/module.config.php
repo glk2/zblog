@@ -110,4 +110,11 @@ return array(
             'pagination_control' => __DIR__ . '/../view/layout/pagination_control.phtml',
         ),        
     ),
+    
+    
+    'module_layouts' => array(
+        'Admin' => 'layout/admin-layout',
+    ),    
+
+    
 );
