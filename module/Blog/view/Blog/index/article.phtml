@@ -10,3 +10,42 @@ echo "<article>
     </div>
 </article>";
 ?>        
+<div class="bs-docs-section">
+    <div class="well">
+<?php
+$form->setAttribute('action', $this->url('blog', array('action' => 'comment-add' ))); 
+$form->setAttribute('class', 'form-horizontal');
+$form->prepare();
+echo $this->form()->openTag($form);
+
+echo '<fieldset><legend>Добавить комментарий</legend>';
+echo '<div id="comment_errors"></div>';
+
+$e=$form->get('userMail');
+$e->setlabelAttributes(array('class'=>'col-lg-2 control-label'));
+echo '<div class="form-group">';
+echo $this->formlabel($e);
+echo "<div class='col-lg-10'>{$this->formEmail($e)}</div>";
+echo '</div>';
+
+$e=$form->get('comment');
+$e->setlabelAttributes(array('class'=>'col-lg-2 control-label'));
+echo '<div class="form-group">';
+echo $this->formlabel($e);
+echo "<div class='col-lg-10'>{$this->formTextarea($e)}</div>";
+echo '</div>';
+
+echo "<input type='hidden' value='{$article->getid()}' name='article'>";
+
+echo $this->formRow($form->get('submit'));
+echo '</fieldset>';
+echo $this->form()->closeTag();
+?>
+        
+    </div>
+</div>
+
+<div id='new-comment' class='panel panel-success' style='display: none;'>
+    <div id='new-comment-email' class='panel-heading'><h3 class='panel-title'</h3></div>
+    <div id='new-comment-body' class='panel-body'></div>
+</div>
