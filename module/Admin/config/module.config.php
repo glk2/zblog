@@ -5,7 +5,8 @@ return array(
         'invokables' => array(
             'Admin\Controller\Index' => 'Admin\Controller\IndexController',
             'category' => 'Admin\Controller\CategoryController',
-            'article' => 'Admin\Controller\ArticleController'
+            'article' => 'Admin\Controller\ArticleController',
+            'comment' => 'Admin\Controller\CommentController',
         ),
     ),
 
@@ -38,6 +39,16 @@ return array(
                             'route'    => 'article/[:action/][:id/]', //
                             'defaults' => array(
                                 'controller' => 'article', //использовали псевдоним описанный ранее
+                                'action'     => 'index',
+                            ),
+                        ),
+                    ),
+                     'comment' => array( // маршрут названние псевдоним, можем обращаться
+                        'type' => 'segment',
+                        'options' => array(
+                            'route'    => 'comment/[:action/][:id/]', //
+                            'defaults' => array(
+                                'controller' => 'comment', //использовали псевдоним описанный ранее
                                 'action'     => 'index',
                             ),
                         ),
@@ -91,11 +102,11 @@ return array(
                     'route' => 'admin/category',
                     'action' => 'add',
                 ),                
-//                array(
-//                    'label' => 'Комментарии',
-//                    'route' => 'admin/comment',
-//                    'action' => 'index',
-//                ),                
+                array(
+                    'label' => 'Комментарии',
+                    'route' => 'admin/comment',
+                    'action' => 'index',
+                ),                
             ),
             ),
         ),

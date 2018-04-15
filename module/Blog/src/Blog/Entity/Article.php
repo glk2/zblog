@@ -59,7 +59,17 @@ class Article
      */
     private $category;
 
-
+    /**
+     * @param \Doctrine\Common\Collections\Collection $property
+     *
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="article", cascade={"persist","remove"})
+     */
+    private $comments;
+    
+    public function getComments() {
+        
+       return $this->comments; 
+    } 
 
     /**
      * Get id
