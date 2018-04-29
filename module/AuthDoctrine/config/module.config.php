@@ -1,55 +1,74 @@
 <?php
+namespace AuthDoctrine;
 
 return array(
-    'doctrine' => array(
-        'driver' => array(
-            // defines an annotation driver with two paths, and names it `my_annotation_driver`
-            'blog_entity' => array(
-                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
-                'cache' => 'array',
-                'paths' => array(
-                    __DIR__ . '/../src/Blog/Entity',
-                ),
-            ),
-
-            // default metadata driver, aggregates all other drivers into a single one.
-            // Override `orm_default` only if you know what you're doing
-            'orm_default' => array(
-                'drivers' => array(
-                    // register `my_annotation_driver` for any entity under namespace `My\Namespace` 'My\Namespace' => 'my_annotation_driver'
-                    'Blog\Entity' => 'blog_entity'
-                )
-            )
-        )
+    'controllers' => array(
+        'invokables' => array(
+            'AuthDoctrine\Controller\Index' => 'AuthDoctrine\Controller\IndexController'
+        ),
     ),    
     
     'router' => array(
         'routes' => array(
-            'blog' => array( // маршрут названние псевдоним, можем обращаться
-                'type' => 'segment',
+            'auth-doctrine' => array( // маршрут названние псевдоним, можем обращаться
+                'type' => 'literal',
                 'options' => array(
-                    'route'    => '/[:action/][:id/]',
-                    'constraints' => array(
-                            'id'         => '[0-9]+',
-                            'action'     => '[a-zA-Z][a-zA-Z0-9_-]+',
-                    ),
+                    'route'    => '/auth-doctrine/', // для сео оптимизации /
                     'defaults' => array(
-                        'controller' => 'Blog\Controller\Index', //использовали псевдоним описанный ранее
-                        'action'     => 'index',
+                        '__NAMESPACE__' => 'AuthDoctrine\Controller',
+                        'controller'    => 'Index', //использовали псевдоним описанный ранее
+                        'action'        => 'index',
                     ),
                 ),
-            ),
-        ),
+                'may_terminate' => true,    
+                'child_routes' => array(
+                    'default' => array( // маршрут названние псевдоним, можем обращаться
+                        'type' => 'segment',
+                        'options' => array(
+                            'route'    => '[:controller/[:action/[:id/]]]', //
+                            'constraints'=>array(
+                                'controller'=> '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'action'    => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                ),
+                            'defaults' => array(
+                            ),
+                        ),
+                    ), //defaulr
+
+                ), //child_routes            
+            ), //main routes
+        
     ),
+    ), //router    
+ 
     
-    'controllers' => array(
-        'invokables' => array(
-            'Blog\Controller\Index' => 'Blog\Controller\IndexController'
-        ),
-    ),
+
+    
     'view_manager' => array(
         'template_path_stack' => array(
             __DIR__ . '/../view',
         ),
+        'display_exceptions' => true,
     ),
+    
+    'doctrine'=> array(
+        'authentication' => array(
+              'orm_default' => array(
+                'identity_class' => '\Blog\Entity\User',
+                'identity_property' => 'usrName',
+                'credential_property' => 'usrPassword',
+                'credential_callable' => function(\Blog\Entity\User $user, $password) {
+                    if ($user->getUsrPassword() == md5('staticSalt'.$password.$user->getUsrPasswordSalt())){
+                    //if ($user->getUsrPassword() == $password){
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+              )
+            
+        )
+        
+    ),
+    
 );

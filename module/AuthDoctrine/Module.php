@@ -7,7 +7,7 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
-namespace Blog;
+namespace AuthDoctrine;
 
 class Module
 {
@@ -26,4 +26,15 @@ class Module
             ),
         );
     }
-}
+    
+    public function getServiceConfig() {
+         return array(
+             'factories'=> array(
+             'Zend\Authentication\AuthenticationService' => function ($serviceManager) {
+                return $serviceManager->get('doctrine.authenticationservice.orm_default'); //замена сервиса
+             }
+             ),
+         );
+    }
+    
+    }
