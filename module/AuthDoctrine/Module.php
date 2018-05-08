@@ -9,6 +9,10 @@
 
 namespace AuthDoctrine;
 
+use Zend\ServiceManager\ServiceManager;
+use Zend\Mail\Transport\Smtp;
+use Zend\Mail\Transport\SmtpOptions;
+
 class Module
 {
     public function getConfig()
@@ -32,8 +36,14 @@ class Module
              'factories'=> array(
              'Zend\Authentication\AuthenticationService' => function ($serviceManager) {
                 return $serviceManager->get('doctrine.authenticationservice.orm_default'); //замена сервиса
-             }
-             ),
+             },
+             'mail.transport' => function (ServiceManager $serviceManager) {
+                $config = $serviceManager->get('Config');
+                $transport = new Smtp();
+                $transport->setOptions(new SmtpOptions($config['mail']['transport']['options']));
+                return $transport;
+             },       
+             )
          );
     }
     

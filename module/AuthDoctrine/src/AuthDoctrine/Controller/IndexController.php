@@ -6,6 +6,7 @@ use Application\Controller\BaseAdminController as BaseController;
 use Blog\Entity\User;
 use DoctrineORMModule\Form\Annotation\AnnotationBuilder;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
+use Zend\Mail\Message;
 
 class IndexController extends BaseController {
     
@@ -119,7 +120,7 @@ public function loginAction() {
                     return $this->redirect()->toRoute('auth-doctrine/default',array('controller'=>'index','action'=>'register'));
                 }
                 $this->prepareData($user);
-                //$this->sendConfirmationEmail($user);
+                $this->sendConfirmationEmail($user);
                 
                 $em->persist($user);
                 $em->flush();
@@ -130,6 +131,20 @@ public function loginAction() {
         
         return array('form' => $form);
     }
+
+    protected function sendConfirmationEmail($user) {
+        $transport = $this->getServiceLocator()->get('mail.transport');
+        $message = new Message();
+        $message->setEncoding("UTF-8");
+        
+        $message->addTo($user->getUsrEmail())
+                ->addFrom('mrkwon@ya.ru')
+                ->setSubject('Регистрация')
+                ->setBody("Вы успешно зарегистрированы на ".
+                          $this->getRequest()->getServer('HTTP_HOST')
+                          );
+    }
+
     
     public function RegistrationSuccessAction() {
         
